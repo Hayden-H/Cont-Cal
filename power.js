@@ -911,7 +911,7 @@ function sendToTeams() {
 
     console.log("Sending the following data to the webhook:", message);
 
-    const webhookUrl = "https://prod-130.westus.logic.azure.com:443/workflows/0a7e2bc646204baaafe0fb0b42292f7e/triggers/manual/paths/invoke?api-version=2016-06-01&sp=%2Ftriggers%2Fmanual%2Frun&sv=1.0&sig=ShiFc_Y9jnU9fStql3GHLwzJUVfcovjYc6SKjXog8kA";
+    const webhookUrl = "";
     fetch(webhookUrl, {
         method: 'POST',
         headers: {
