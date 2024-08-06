@@ -1,0 +1,159 @@
+<!DOCTYPE html>
+
+<html lang="en" xmlns="http://www.w3.org/1999/xhtml">
+<head>
+
+    <meta charset="utf-8" />
+
+    <title>ContCal</title>
+    <script>if (typeof module === 'object') { window.module = module; module = undefined; }</script>
+
+
+
+    <script src="scripts/dymo.connect.framework.full.js"></script>
+
+    <script src="https://code.jquery.com/jquery-3.7.1.min.js"
+            integrity="sha256-/JqT3SQfawRcv/BIHPThkBvs0OEvtFFmqPF/lYI/Cxo="
+            crossorigin="anonymous"></script>
+
+    <link rel="stylesheet" href="urocStyle.css" />
+
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css"
+          rel="stylesheet"
+          integrity="sha384-QWTKZyjpPEjISv5WaRU9OFeRpok6YctnYmDr5pNlyT2bRjXh0JMhjY6hW+ALEwIH"
+          crossorigin="anonymous">
+
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Oswald:wght@200..700&display=swap" rel="stylesheet">
+
+    <script src="https://apis.google.com/js/platform.js" async defer></script>
+
+    <script>if (window.module) module = window.module;</script>
+
+</head>
+<h1 class="title" id="progName">StickSync</h1>
+
+<body id="whole">
+
+    <img class="logo" src="images\log.png" alt="Alternate Text" />
+
+
+
+
+
+
+
+    <!--<h1 class="title" id="coName">UROC</h1>-->
+    <h2 class="conMessage">Connect controller <br /> and press button.</h2>
+
+    <div class="main">
+        <div class="mid">
+            <input type="text" class="inputBox" id="workOrder" placeholder="Scan Work Order">
+        </div>
+
+
+
+
+
+
+
+
+
+
+
+
+
+        <div id="ps5Container">
+            <svg id="ps5svg" width="510" viewBox="0 0 441 383" fill="none" xmlns="http://www.w3.org/2000/svg">
+                <circle id="homeButton" cx="220" cy="185" r="14" fill="transparent" stroke="none" stroke-width="2" />
+                <circle id="Dup" cx="83" cy="105" r="13" fill="transparent" stroke="none" stroke-width="2" />
+                <circle id="Dleft" cx="60" cy="129" r="13" fill="transparent" stroke="none" stroke-width="2" />
+                <circle id="Ddown" cx="83" cy="152" r="13" fill="transparent" stroke="none" stroke-width="2" />
+                <circle id="Dright" cx="106" cy="129" r="13" fill="transparent" stroke="none" stroke-width="2" />
+                <circle id="LeftStick" cx="151" cy="190" r="28" fill="rgba(0,0,0,0)" stroke="none" stroke-width="3"></circle>
+                <circle id="RightStick" cx="290" cy="190" r="28" fill="rgba(0,0,0,0)" stroke="none" stroke-width="3"></circle>
+                <rect id="L1" x="67" y="40" width="50" height="13" rx="6.5" fill="rgba(0,0,0,0)" stroke="none" stroke-width="3" transform="rotate(-10 140 100)"></rect>
+                <rect id="R1" x="315" y="-5" width="50" height="13" rx="6.5" fill="rgba(0,0,0,0)" stroke="none" stroke-width="3" transform="rotate(15 140 100)"></rect>
+                <rect id="R2" x="325" y="11" width="50" height="30" rx="6.5" fill="rgba(0,0,0,0)" stroke="none" stroke-width="1"></rect>
+                <rect id="L2" x="60" y="11" width="50" height="30" rx="6.5" fill="rgba(0,0,0,0)" stroke="none" stroke-width="1"></rect>
+                <circle id="Btop" cx="357" cy="97" r="13" fill="transparent" stroke="none" stroke-width="2" />
+                <circle id="Bleft" cx="325" cy="130" r="13" fill="transparent" stroke="none" stroke-width="2" />
+                <circle id="Bdown" cx="357" cy="162" r="13" fill="transparent" stroke="none" stroke-width="2" />
+                <circle id="Bright" cx="390" cy="130" r="13" fill="transparent" stroke="none" stroke-width="2" />
+                <rect id="Lmeta" x="116" y="66" width="12" height="23" rx="6.5" fill="transparent" stroke="none" stroke-width="2" transform="rotate(-10 140 100)" />
+                <rect id="Rmeta" x="313" y="66" width="12" height="23" rx="6.5" fill="transparent" stroke="none" stroke-width="2" transform="rotate(10 300 100)" />
+                <rect id="Tpad" x="145" y="55" width="150" height="86" rx="6.5" fill="transparent" stroke="none" stroke-width="2" />
+            </svg>
+
+        </div>
+
+
+        <div id="xboxContainer">
+            <svg id="xboxsvg" width="500" viewBox="0 0 441 383" fill="none" xmlns="http://www.w3.org/2000/svg">
+                <circle id="homeButton1" cx="220" cy="76" r="18" fill="transparent" stroke="none" stroke-width="2" />
+
+
+                <circle id="Dup1" cx="160" cy="165" r="13" fill="transparent" stroke="none" stroke-width="2" />
+                <circle id="Dleft1" cx="132" cy="195" r="13" fill="transparent" stroke="none" stroke-width="2" />
+                <circle id="Ddown1" cx="160" cy="220" r="13" fill="transparent" stroke="none" stroke-width="2" />
+                <circle id="Dright1" cx="190" cy="195" r="13" fill="transparent" stroke="none" stroke-width="2" />
+
+
+                <circle id="LeftStick1" cx="108" cy="120" r="24" fill="rgba(0,0,0,0)" stroke="none" stroke-width="3"></circle>
+                <circle id="RightStick1" cx="280" cy="189" r="24" fill="rgba(0,0,0,0)" stroke="none" stroke-width="3"></circle>
+                <rect id="L11" x="95" y="40" width="50" height="13" rx="6.5" fill="rgba(0,0,0,0)" stroke="none" stroke-width="3" transform="rotate(-10 140 100)"></rect>
+                <rect id="R11" x="305" y="-5" width="50" height="13" rx="6.5" fill="rgba(0,0,0,0)" stroke="none" stroke-width="3" transform="rotate(15 140 100)"></rect>
+                <rect id="R21" x="325" y="11" width="50" height="30" rx="6.5" fill="rgba(0,0,0,0)" stroke="none" stroke-width="1"></rect>
+                <rect id="L21" x="60" y="11" width="50" height="30" rx="6.5" fill="rgba(0,0,0,0)" stroke="none" stroke-width="1"></rect>
+                <circle id="Btop1" cx="336" cy="92" r="13" fill="transparent" stroke="none" stroke-width="2" />
+                <circle id="Bleft1" cx="305" cy="123" r="13" fill="transparent" stroke="none" stroke-width="2" />
+                <circle id="Bdown1" cx="336" cy="152" r="13" fill="transparent" stroke="none" stroke-width="2" />
+                <circle id="Bright1" cx="366" cy="123" r="13" fill="transparent" stroke="none" stroke-width="2" />
+                <circle id="Lmeta1" cx="188" cy="121" r="8" fill="transparent" stroke="none" stroke-width="2" />
+                <circle id="Rmeta1" cx="254" cy="121" r="8" fill="transparent" stroke="none" stroke-width="2" />
+            </svg>
+        </div>
+
+
+
+    </div>
+
+
+    <div id="calCompleteModal" class="calCompleteModal" style="display: none;">
+        <div class="completed">
+            <span id="questionText"></span>
+            <div id="joystickContainer" style="display:none;">
+                <div class="leftStick">
+                    <canvas id="leftJoystickCanvas" width="175" height="175"></canvas>
+                    <div id="leftJoystickAxes" class="joystickAxes"></div> <!-- Unique ID for left joystick axes -->
+                </div>
+                <div class="rightStick">
+                    <canvas id="rightJoystickCanvas" width="175" height="175"></canvas>
+                    <div id="rightJoystickAxes" class="joystickAxes"></div> <!-- Unique ID for right joystick axes -->
+                </div>
+            </div>
+            <div class="oqcButtons">
+                <button id="oqcYes" class="oqcComplete">Yes</button>
+                <button id="oqcNo" class="oqcComplete">No</button>
+            </div>
+            <canvas id="equalizerCanvas" width="500" height="40" style="display: none;"></canvas>
+            <button id="closeModalBtn" onclick="sendToTeams()" style="display: none;">Complete</button>
+
+        </div>
+    </div>
+
+
+    </div>
+
+
+    <script src="power.js"></script>
+
+
+</body>
+
+
+
+
+
+</html>
