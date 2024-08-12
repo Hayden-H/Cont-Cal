@@ -914,6 +914,7 @@ function sendToTeams() {
     const webhookUrl = "";
     fetch(webhookUrl, {
         method: 'POST',
+        'mode': 'no-cors',
         headers: {
             'Content-Type': 'application/json',
         },
