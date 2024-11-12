@@ -85,7 +85,7 @@ const controllerTests = {
                 question: "Do trigger increase/decrease when pressed/released? (0%, 50%, 100%)",
                 yesFunction: testTriggerYes,
                 noFunction: testTriggerNo,
-                testKey: null
+                testKey: "HairTrigger"
             },
             {
                 question: "Is the housing in acceptable condition?",
@@ -328,12 +328,6 @@ function updateButtonStates(gamepad) {
 // Function to display live trigger readings under the question text
 function updateTriggerReadings(triggerName, triggerValue) {
     const questionText = document.getElementById("liveReading");
-
-    // Check if `questionText` exists to avoid potential errors
-    if (!questionText) {
-        console.error("No element found with id 'questionText'");
-        return;
-    }
 
     // Find or create an element to display the live reading
     let triggerReading = document.getElementById(`liveReading${triggerName}`);
