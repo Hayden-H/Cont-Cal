@@ -101,40 +101,36 @@
             </svg>
         </div>
 
-    </div>
-
-    </div>
-
 
     <div id="calCompleteModal" class="calCompleteModal" style="display: none;">
         <div class="completed">
             <span id="questionText"></span>
-            <div id="liveReading">
+            
             <div id="joystickContainer" style="display:none;">
+
                 <div class="leftStick">
                     <canvas id="leftJoystickCanvas" width="175" height="175"></canvas>
                     <div id="leftJoystickAxes" class="joystickAxes"></div> <!-- Unique ID for left joystick axes -->
                 </div>
+
                 <div class="rightStick">
                     <canvas id="rightJoystickCanvas" width="175" height="175"></canvas>
                     <div id="rightJoystickAxes" class="joystickAxes"></div> <!-- Unique ID for right joystick axes -->
                 </div>
-            </div>
+
             </div>
 
-            
+            <span id="liveReading"></span>
 
             <div class="oqcButtons">
                 <button id="oqcYes" class="oqcComplete">Yes</button>
                 <button id="oqcNo" class="oqcComplete">No</button>
             </div>
-            <canvas id="equalizerCanvas" width="500" height="40" style="display: none;"></canvas>
-            <button id="closeModalBtn" onclick="sendToTeams()" style="display: none;">Complete</button>
+
+             <canvas id="equalizerCanvas" width="500" height="40" style="display: none;"></canvas>
+             <button id="closeModalBtn" onclick="sendToTeams()" style="display: none;">Complete</button>
 
         </div>
-    </div>
-
-
     </div>
 
 
