@@ -6,7 +6,7 @@ let currentControllerType;
 let currentQuestionIndex = 0;
 let questions = [];
 
-localStorage.setItem('CalResult', 'Pass');
+
 
 
 const buttonToIdMap = {
