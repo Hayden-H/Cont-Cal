@@ -2,11 +2,11 @@ let calibrationPageOpened = false;
 let totalButtons;
 let pressedButtons = new Set();
 let modalShown = false;
-let currentControllerType = 'playstation';
+let currentControllerType;
 let currentQuestionIndex = 0;
 let questions = [];
 
-localStorage.setItem('CalResult', 'Fail');
+localStorage.setItem('CalResult', 'Pass');
 
 
 const buttonToIdMap = {
@@ -39,8 +39,8 @@ const controllerTests = {
                 question: "Do trigger increase/decrease when pressed/released? (0%, 50%, 100%)",
                 yesFunction: testTriggerYes,
                 noFunction: testTriggerNo,
-                testKey: "HairTrigger",
-                action: "updateTriggerReadings"
+                action: null,
+                testKey: "Triggers"
             },
             {
                 question: "Is the housing in acceptable condition?",
@@ -85,7 +85,7 @@ const controllerTests = {
                 question: "Do trigger increase/decrease when pressed/released? (0%, 50%, 100%)",
                 yesFunction: testTriggerYes,
                 noFunction: testTriggerNo,
-                testKey: "HairTrigger"
+                testKey: "Triggers"
             },
             {
                 question: "Is the housing in acceptable condition?",
@@ -99,7 +99,7 @@ const controllerTests = {
                 yesFunction: testAdaptiveTriggersYes,
                 noFunction: testAdaptiveTriggersNo,
                 action: null,
-                testKey: "AdaptiveTriggers"
+                testKey: "Triggers"
             },
             {
                 question: "Are the joysticks responding and returning to the 0 location?",
@@ -244,7 +244,7 @@ function saveGamepadDetails(gamepad) {
     console.log('Gamepad details saved:', gamepadDetails);
     // Set the visibility of the appropriate SVG
     if (gamepad.id.toLowerCase().includes('xbox')) {
-        localStorage.setItem('AdaptiveTriggers', '');
+        localStorage.setItem('Triggers', '');
         localStorage.setItem("CalResult", "Pass");
         document.getElementById('xboxsvg').style.display = 'block';
         document.getElementById('ps5svg').style.display = 'none';
@@ -346,9 +346,6 @@ function updateTriggerReadings(triggerName, triggerValue) {
 }
 
 
-
-
-
 function checkButtonCount() {
     const greenFilledElements = document.querySelectorAll('.greenFill');
     if (greenFilledElements.length === totalButtons && !modalShown) {
@@ -372,7 +369,7 @@ function pollGamepads() {
 
 
 function showFinalResult() {
-    checkOqcResult();
+    
     const elements = document.getElementsByClassName("oqcButtons");
 
     // Hide all button elements
@@ -383,12 +380,12 @@ function showFinalResult() {
 
     const resultMessage = document.getElementById("questionText");
     const oqcResult = localStorage.getItem("oqcResult");
-    const resultClass = oqcResult === "Pass" ? "pass" : "fail"; // Determine the class based on the result
+    const resultClass = oqcResult === "Pass" ? "Pass" : "fail"; // Determine the class based on the result
 
     // Update the result display with appropriate coloring
     resultMessage.innerHTML = `OQC Complete. Result: <strong class="${resultClass}">${oqcResult}</strong><br/>`;
 
-    let tests = ["Housing", "Vibration", "AdaptiveTriggers", "LEDs", "Joysticks", "buttonsCheck", "MicCheck", "CalResult"];
+    let tests = ["Housing", "Vibration", "Triggers", "LEDs", "Joysticks", "buttonsCheck", "MicCheck", "CalResult"];
     tests.forEach(test => {
         let testResult = localStorage.getItem(test);
         if (testResult !== null) {  // Only display results for tests that are not null
@@ -409,7 +406,7 @@ function checkOqcResult() {
 
     let allTestsPass = true; // Start with all tests passing
     let failedTests = []; // Array to hold names of failed tests for detailed logging
-
+    
     questions.forEach(question => {
         let testResult = localStorage.getItem(question.testKey);
         if (testResult !== "Pass") {
@@ -431,6 +428,7 @@ function checkOqcResult() {
         }
     } else {
         console.log("OQC Result: Pass");
+        localStorage.setItem("oqcResult", "Pass");
     }
 }
 
@@ -481,23 +479,25 @@ function testVibrationNo() {
 }
 
 function testAdaptiveTriggersYes() {
-    localStorage.setItem("AdaptiveTriggers", "Pass");
+    localStorage.setItem("Triggers", "Pass");
     checkOqcResult();
 }
 
 function testAdaptiveTriggersNo() {
-    localStorage.setItem("AdaptiveTriggers", "Fail");
+    localStorage.setItem("Triggers", "Fail");
     checkOqcResult();
 }
 
 function testTriggerYes() {
     var triggerOutput = document.getElementById("liveReading");
+    localStorage.setItem("Triggers", "Pass");
     triggerOutput.style.display = "none";
     checkOqcResult();
 }
 
 function testTriggerNo() {
     var triggerOutput = document.getElementById("liveReading");
+    localStorage.setItem("Triggers", "Fail");
     triggerOutput.style.display = "none";
     checkOqcResult();
 }
@@ -608,7 +608,8 @@ function showQuestion() {
         const joystickContainer = document.getElementById("joystickContainer");
         if (question.action === "updateJoysticks") {
             joystickContainer.style.display = 'flex'; // Ensure this is visible
-            window[question.action](); // Update the joystick visualization
+            updateJoysticks();
+            //window[question.action](); // Update the joystick visualization
         } else {
             joystickContainer.style.display = 'none'; // Hide if not relevant
         }
@@ -934,7 +935,7 @@ function sendToTeams() {
     // Retrieve values from localStorage, with defaults for missing values
     const values = {
         workOrder: localStorage.getItem('workOrder') || 'Unknown',
-        controller: localStorage.getItem('gamepad_1') || localStorage.getItem('gamepad_0'),
+        controller: localStorage.getItem('controllerType') || localStorage.getItem('gamepad_0'),
         preCalAxes: localStorage.getItem('preCalJoystick') || 'Unknown',
         postCalAxes: localStorage.getItem('postCalJoystick') || 'Unknown',
         calResult: localStorage.getItem('CalResult') || 'Fail',  // Default to 'Fail' if not set
@@ -943,7 +944,7 @@ function sendToTeams() {
         joystickCheck: localStorage.getItem("Joysticks") || 'Unknown',
         housingCheck: localStorage.getItem("Housing") || 'Unknown',
         ledCheck: localStorage.getItem("LEDs") || 'Unknown',
-        adaptiveTriggerCheck: localStorage.getItem("AdaptiveTriggers") || 'Unknown',
+        adaptiveTriggerCheck: localStorage.getItem("Triggers") || 'Unknown',
         vibration: localStorage.getItem('Vibration') || 'Unknown',
         mic: localStorage.getItem('MicCheck') || 'Unknown',
         touchpad : localStorage.getItem('Touchpad') || 'Unknown'
