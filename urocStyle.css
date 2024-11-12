@@ -20,6 +20,14 @@ html, body {
     color: white;
 }
 
+.hidden {
+    display: none !important;
+    visibility: hidden !important;
+}
+
+#liveReadingundefined {
+    display: none;
+}
 #whole {
     display: flex;
     flex-direction: column;
