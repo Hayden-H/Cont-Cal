@@ -85,7 +85,7 @@ const controllerTests = {
                 question: "Do trigger increase/decrease when pressed/released? (0%, 50%, 100%)",
                 yesFunction: testTriggerYes,
                 noFunction: testTriggerNo,
-                testKey: "HairTrigger"
+                testKey: null
             },
             {
                 question: "Is the housing in acceptable condition?",
