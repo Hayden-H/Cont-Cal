@@ -36,6 +36,13 @@ const controllerTests = {
     xbox: {
         questions: [
             {
+                question: "Do trigger increase/decrease when pressed/released? (0%, 50%, 100%)",
+                yesFunction: testTriggerYes,
+                noFunction: testTriggerNo,
+                testKey: "HairTrigger",
+                action: "updateTriggerReadings"
+            },
+            {
                 question: "Is the housing in acceptable condition?",
                 yesFunction: testHousingYes,
                 noFunction: testHousingNo,
@@ -74,6 +81,12 @@ const controllerTests = {
     },
     playstation: {
         questions: [
+            {
+                question: "Do trigger increase/decrease when pressed/released? (0%, 50%, 100%)",
+                yesFunction: testTriggerYes,
+                noFunction: testTriggerNo,
+                testKey: "HairTrigger"
+            },
             {
                 question: "Is the housing in acceptable condition?",
                 yesFunction: testHousingYes,
@@ -133,7 +146,6 @@ const controllerTests = {
         ]
     }
 };
-
 
 // Usage
 function getTestDetails(controllerType) {
@@ -262,20 +274,35 @@ function openPS5PageIfNotOpened() {
 function updateButtonStates(gamepad) {
     for (let index = 0; index < gamepad.buttons.length; index++) {
         const button = gamepad.buttons[index];
+
+        // Only proceed for L2 and R2 triggers (indices 6 and 7)
+        if (index === 6 || index === 7) {
+            const triggerValue = button.value; // Value ranges from 0 to 1
+            const triggerName = index === 6 ? 'L2' : 'R2';
+
+            // Update the fuel gauge height for the trigger element in the UI
+            const triggerElement = document.getElementById(`${triggerName}trigger`);
+            if (triggerElement) {
+                triggerElement.style.height = `${triggerValue * 100}%`; // Adjust height based on trigger pressure
+            }
+
+            // Update the live readings display only if the value is valid
+            if (!isNaN(triggerValue)) {
+                updateTriggerReadings(triggerName, triggerValue);
+            }
+        }
+
+        // Existing logic for other buttons
         const baseElementId = buttonToIdMap[index];
         if (baseElementId) {
             const suffix = gamepad.id.toLowerCase().includes('xbox') ? '1' : '';
             const svgElement = document.querySelector(`#ps5svg #${baseElementId}${suffix}, #xboxsvg #${baseElementId}${suffix}`);
-
+            
             if (svgElement) {
                 svgElement.style.opacity = '1'; // Ensure the element is visible
 
-                // Adjust handling for analog buttons like L2 and R2
-                let isPressed = button.pressed;
-                if (index === 6 || index === 7) { // Indices for L2 and R2 in standard mapping
-                    isPressed = button.value > 0.1; // Consider it pressed if the value is greater than a threshold
-                }
-
+                // Regular press/release logic for non-trigger buttons
+                const isPressed = button.pressed;
                 if (isPressed) {
                     if (!pressedButtons.has(index)) {
                         pressedButtons.add(index);
@@ -297,6 +324,34 @@ function updateButtonStates(gamepad) {
     }
     checkButtonCount();  // Ensure this is called after updating states
 }
+
+// Function to display live trigger readings under the question text
+function updateTriggerReadings(triggerName, triggerValue) {
+    const questionText = document.getElementById("liveReading");
+
+    // Check if `questionText` exists to avoid potential errors
+    if (!questionText) {
+        console.error("No element found with id 'questionText'");
+        return;
+    }
+
+    // Find or create an element to display the live reading
+    let triggerReading = document.getElementById(`liveReading${triggerName}`);
+    if (!triggerReading) {
+        const lineBreak = document.createElement("br"); // Create line break
+        triggerReading = document.createElement("span"); // Create span element for the reading
+        triggerReading.id = `liveReading${triggerName}`;
+        
+        // Append the line break and the reading span to the question text
+        questionText.appendChild(lineBreak);
+        questionText.appendChild(triggerReading);
+    }
+
+    // Update the text content with the current reading
+    triggerReading.textContent = `${triggerName} trigger level: ${(triggerValue * 100).toFixed(1)}%`;
+}
+
+
 
 
 
@@ -387,8 +442,6 @@ function checkOqcResult() {
 
 
 
-
-
 // Example test functions
 
 function testHousingYes() {
@@ -440,6 +493,18 @@ function testAdaptiveTriggersYes() {
 
 function testAdaptiveTriggersNo() {
     localStorage.setItem("AdaptiveTriggers", "Fail");
+    checkOqcResult();
+}
+
+function testTriggerYes() {
+    var triggerOutput = document.getElementById("liveReading");
+    triggerOutput.style.display = "none";
+    checkOqcResult();
+}
+
+function testTriggerNo() {
+    var triggerOutput = document.getElementById("liveReading");
+    triggerOutput.style.display = "none";
     checkOqcResult();
 }
 
